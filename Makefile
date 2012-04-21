@@ -8,7 +8,7 @@ SRC 	= src/output.cpp \
 OBJ	= $(SRC:.cpp=.o)
 NAME = e2midi
 LIBS = -lstk
-CFLAGS = -O3 -W -I/usr/include/stk
+CFLAGS = -O3 -W -g -I/usr/include/stk
 
 all: $(NAME)
 
