@@ -3,7 +3,7 @@
 
 #include "trigger.hpp"
 
-class ThresholfTrigger: Trigger
+class ThresholfTrigger: public Trigger
 {
 	public:
 		ThresholfTrigger(Output& output);
