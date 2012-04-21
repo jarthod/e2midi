@@ -12,7 +12,6 @@ void ThresholfTrigger::feedMe(stk::StkFloat *samples, unsigned int buffSize)
 	int left_start = -1;
 	int right_start = -1;
 
-	std::cout << "new frame" << std::endl;
 	for (unsigned int i = 0; i < buffSize; i += 2)
 	{
 		if (abs(samples[i]) > THRESHOLD)
@@ -22,7 +21,7 @@ void ThresholfTrigger::feedMe(stk::StkFloat *samples, unsigned int buffSize)
 		if (left_start >= 0 && right_start >= 0)
 		{
 			std::cout << "trigger !" << std::endl;
-			this->output.trigger(std::max(0, std::min(1, ((left_start - right_start + 10) / 20))));
+			this->output.trigger(std::max(0., std::min(1., ((left_start - right_start + 10.) / 20.))));
 			return;
 		}
 	}

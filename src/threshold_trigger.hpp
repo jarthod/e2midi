@@ -10,7 +10,7 @@ class ThresholfTrigger: public Trigger
 		virtual void feedMe(stk::StkFloat* samples, unsigned int buffSize);
 
 	private:
-		static const stk::StkFloat THRESHOLD = 0.001;
+		static const stk::StkFloat THRESHOLD = 0.0001;
 		Output& output;
 };
 
