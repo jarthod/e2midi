@@ -3,15 +3,16 @@
 #define INPUT_HPP
 
 #include "RtAudio.h"
+#include "trigger.hpp"
 
 class Input {
 public:
-  Input();
+  Input(Trigger& trgr);
   void run();
   void close();
 protected:
 private:
-  Triger &triger;
+  Trigger &trigger;
   RtAudio dac;
 };
 

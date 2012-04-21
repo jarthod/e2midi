@@ -3,6 +3,7 @@ SRC 	= src/output.cpp \
 	src/output_console.cpp \
 	src/main.cpp \
 	src/input.cpp \
+	src/threshold_trigger.cpp
 
 OBJ	= $(SRC:.cpp=.o)
 NAME = e2midi

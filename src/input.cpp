@@ -1,29 +1,30 @@
 #include "input.hpp"
-#include "triger.h"
+using namespace stk;
 
 int callback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames, double streamTime, RtAudioStreamStatus status, void *dataPointer)
 {
-  Triger &triger = static_cast<Triger *>(dataPointer);
+  Trigger *trigger = static_cast<Trigger *>(dataPointer);
   register StkFloat *samples = static_cast<StkFloat *>(inputBuffer);
-  triger->feedme(samples, nBufferFrames);
+  trigger->feedMe(samples, nBufferFrames);
   return (0);
 }
 
-Input::Input(Triger& trgr) : triger(trgr)
+Input::Input(Trigger& trgr) : trigger(trgr)
 {
-  RtAudio::StreamParameters *parameters;
+  unsigned int bufferFrames = RT_BUFFER_SIZE;
+  RtAudio::StreamParameters parameters;
   RtAudioFormat format = ( sizeof(StkFloat) == 8 ) ? RTAUDIO_FLOAT64 : RTAUDIO_FLOAT32;
 
-  parameters.deviceId = getDefaultInputDevice();
+  parameters.deviceId = this->dac.getDefaultInputDevice();
   parameters.nChannels = 2;
   Stk::setSampleRate(44100.0);
 
   try {
-    dac.openStream( &parameters, &iparameters, format, (unsigned int)Stk::sampleRate(), &bufferFrames, &callback, (void *)&triger);
+    dac.openStream( &parameters, &parameters, format, (unsigned int)Stk::sampleRate(), &bufferFrames, &callback, (void *)&trigger);
   }
   catch ( RtError &error ) {
     error.printMessage();
-    exit();
+    exit(1);
   }
 }
 
@@ -34,7 +35,7 @@ void Input::run()
   }
   catch ( RtError &error ) {
     error.printMessage();
-    exit();
+    exit(1);
   }
 }
 
