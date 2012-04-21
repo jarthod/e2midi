@@ -8,7 +8,7 @@ int main()
   ConsoleOutput out;
   out.trigger(0.5);
 
-	ThresholfTrigger tt = ThresholfTrigger(out);
+	ThresholdTrigger tt = ThresholdTrigger(out);
 
 	Input in = Input(tt);
 	in.run();
