@@ -1,7 +1,9 @@
-CC		= g++
+CC	= g++
 SRC 	= src/output.cpp \
-				src/output_console.cpp \
-				src/main.cpp
+	src/output_console.cpp \
+	src/main.cpp \
+	src/input.cpp \
+
 OBJ	= $(SRC:.cpp=.o)
 NAME = e2midi
 LIBS = -lstk
