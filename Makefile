@@ -1,6 +1,7 @@
 CC	= g++
 SRC 	= src/output.cpp \
 	src/output_console.cpp \
+	src/output_midi.cpp \
 	src/main.cpp \
 	src/input.cpp \
 	src/threshold_trigger.cpp

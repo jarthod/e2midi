@@ -1,11 +1,11 @@
 #include <iostream>
-#include "output_console.hpp"
+#include "output_midi.hpp"
 #include "input.hpp"
 #include "threshold_trigger.hpp"
 
 int main()
 {
-  ConsoleOutput out;
+  MidiOutput out;
   out.trigger(0.5);
 
 	ThresholdTrigger tt = ThresholdTrigger(out);

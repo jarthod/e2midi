@@ -6,7 +6,7 @@
 #include "threshold_trigger.hpp"
 
 const stk::StkFloat ThresholdTrigger::WIDTH = 10;
-const double ThresholdTrigger::THRESHOLD = 2;
+const double ThresholdTrigger::THRESHOLD = 1;
 const int ThresholdTrigger::AVG_WIDTH = 40;
 	
 ThresholdTrigger::ThresholdTrigger(Output& output)
