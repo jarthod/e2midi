@@ -12,10 +12,12 @@ class ThresholdTrigger: public Trigger
       TRIGGERING,
       TRIGGERED
     };
-    static const stk::StkFloat THRESHOLD;
+    static const stk::StkFloat  THRESHOLD;
     static const double         WIDTH;
+    static const int            AVG_WIDTH;
 		ThresholdTrigger(Output& output);
-		virtual void feedMe(stk::StkFloat* samples, unsigned int buffSize);
+		void  feedMe(stk::StkFloat* samples, unsigned int buffSize);
+    int   evaluateTimeDifference();
 
 	private:
     void        displaySample(stk::StkFloat left, stk::StkFloat right);

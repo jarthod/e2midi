@@ -6,8 +6,9 @@
 #include "threshold_trigger.hpp"
 
 const stk::StkFloat ThresholdTrigger::WIDTH = 10;
-const double ThresholdTrigger::THRESHOLD = 4;
-
+const double ThresholdTrigger::THRESHOLD = 2;
+const int ThresholdTrigger::AVG_WIDTH = 40;
+	
 ThresholdTrigger::ThresholdTrigger(Output& output)
 : Trigger(output), output(output)
 {}
@@ -54,10 +55,37 @@ void ThresholdTrigger::displaySample(stk::StkFloat left, stk::StkFloat right)
 	std::cout << left << " - " << right << std::endl;
 }
 		
+int	ThresholdTrigger::evaluateTimeDifference()
+{
+	int	res = -WIDTH;
+	double bestScore = 999;
+	for (int shift = -WIDTH; shift <= WIDTH; shift++) {
+		double score = 0;
+		for (int l = 0; l < AVG_WIDTH; l++) {
+			int r = l + shift;
+			if (r >= 0 && r < AVG_WIDTH) {
+				score += pow(last_vals[l*2] - last_vals[r*2+1], 2);
+			}
+		}
+		if (score < bestScore) {
+			bestScore = score;
+			res = shift;
+		}
+	}
+	int cross = 0;
+	for (int l = 2; l < AVG_WIDTH*2; l+=2) {
+		if (last_vals[l] * last_vals[l-2] < 0)
+			cross++;
+		if (last_vals[l+1] * last_vals[l-1] < 0)
+			cross++;
+	}
+	if (cross < 10)
+		res = -9999;
+	return res;
+}
 
 void ThresholdTrigger::feedMe(stk::StkFloat *samples, unsigned int buffSize)
 {
-	const int avg_width = 40;
 	static stk::StkFloat lavg = 0, ravg = 0;
 	int left_start = -1;
 	int right_start = -1;
@@ -72,16 +100,16 @@ void ThresholdTrigger::feedMe(stk::StkFloat *samples, unsigned int buffSize)
 		// Add values to queue
 		last_vals.push_back(samples[i]);
 		last_vals.push_back(samples[i + 1]);
-		if (last_vals.size() >= avg_width * 2) {
+		if (last_vals.size() >= AVG_WIDTH * 2) {
 			lavg -= fabs(last_vals.front());
 			last_vals.pop_front();
 			ravg -= fabs(last_vals.front());
 			last_vals.pop_front();
 		}
-		//if (((i/2) - left_start) > (WIDTH * 2))
-		//	left_start = -1;
-		//if (((i/2) - right_start) > (WIDTH * 2))
-		//	right_start = -1;
+		if (state == UNTRIGGERED && ((i/2) - left_start) > (WIDTH * 2))
+			left_start = -1;
+		if (state == UNTRIGGERED && ((i/2) - right_start) > (WIDTH * 2))
+			right_start = -1;
 		if ((left_start < 0) && (lavg > THRESHOLD))
 			left_start = i / 2;
 		if ((right_start < 0) && (ravg > THRESHOLD))
@@ -92,12 +120,16 @@ void ThresholdTrigger::feedMe(stk::StkFloat *samples, unsigned int buffSize)
 			left_start = -1;
 		}
 		if (state == TRIGGERING) {
-			displaySample(samples[i], samples[i+1]);
+		//	displaySample(samples[i], samples[i+1]);
 		}
-		if (state == TRIGGERING && (i/2) == (std::max(left_start, right_start) + (avg_width / 2))) {
-			std::cout << "trigger ! " << lavg << " - " << ravg << " - " << left_start << " - " << right_start << std::endl;
-			
-			this->output.trigger((std::max(-WIDTH, std::min(WIDTH, static_cast<double>(left_start - right_start))) + WIDTH) / (2.*WIDTH));
+		if (state == TRIGGERING && (i/2) == (std::max(left_start, right_start) + (AVG_WIDTH / 2))) {
+			int diff = evaluateTimeDifference();
+			//std::cout << "trigger ! " << lavg << " - " << ravg << " - " << left_start << " - " << right_start << " (" << diff << ")" << std::endl;
+			if (diff == -9999) {
+				//std::cout << "false positive !!!" << std::endl;
+			} else {
+				this->output.trigger((std::max(-WIDTH, std::min(WIDTH, static_cast<double>(diff))) + WIDTH) / (2.*WIDTH));				
+			}
 			state = TRIGGERED;
 		}
 
@@ -105,10 +137,10 @@ void ThresholdTrigger::feedMe(stk::StkFloat *samples, unsigned int buffSize)
 		if (state == UNTRIGGERED && left_start >= 0 && right_start >= 0) {
 			//std::cerr << out.rdbuf();
 			//out.clear();
-			for (int j = 0; j < last_vals.size(); j+= 2) {
-				displaySample(last_vals[j], last_vals[j+1]);
-			}
-			std::cout << "detection ! " << lavg << " - " << ravg << " - " << left_start << " - " << right_start << " (" << (std::max(-WIDTH, std::min(WIDTH, static_cast<double>(left_start - right_start))) + WIDTH) / (2.*WIDTH) << ")" << std::endl;
+			//for (unsigned j = 0; j < last_vals.size(); j+= 2) {
+			//	displaySample(last_vals[j], last_vals[j+1]);
+			//}
+			//std::cout << "detection ! " << lavg << " - " << ravg << " - " << left_start << " - " << right_start << " (" << (left_start - right_start) << ")" << std::endl;
 			state = TRIGGERING;
 		}
 	}
