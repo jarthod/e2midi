@@ -7,16 +7,15 @@ from pygame import mixer
 class e2midiClient(object):
 
     def __init__(self, song_list):
-        self.song_list = song_list
-        self.song_list.append(song_list[-1])
-        print self.song_list
+        self.sound = []
         mixer.init()
+        for i in song_list:
+            self.sound.append(mixer.Sound(i))
 
     def handle_data(self, position):
         print position
-        print "play: %s" % self.song_list[int(position * (len(self.song_list) - 1))]
-        sound = mixer.Sound(self.song_list[int(position * (len(self.song_list) - 1))])
-        sound.play()
+        print "play: %s" % int(position * (len(self.sound) - 1))
+        self.sound[min(len(self.sound), int(position * (len(self.sound) - 1)))].play()
 
     def listen(self, host):
         s = socket.create_connection((host, 2012))

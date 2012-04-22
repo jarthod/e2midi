@@ -24,7 +24,8 @@ class e2midi(QtGui.QMainWindow, Ui_e2midi):
         for i in range(nb):
             b = QtGui.QProgressBar()
             b.setOrientation(Qt.Qt.Vertical)
-            b.setFormat("")
+            b.setFormat("%d" % i)
+            b.setValue(0)
             self.central.addWidget(b)
             self.bar.append(b)
 
