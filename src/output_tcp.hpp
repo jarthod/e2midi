@@ -2,6 +2,7 @@
 #define OUTPUT_TCP_HPP
 
 #include <TcpServer.h>
+#include <set>
 #include "output.hpp"
 
 class TCPOutput : public Output {
@@ -11,7 +12,7 @@ public:
 
 private:
   stk::TcpServer server;
-  int             client;
+  std::set<int>  clients;
 };
 
 #endif
