@@ -114,7 +114,7 @@ void ThresholdTrigger::feedMe(stk::StkFloat *samples, unsigned int buffSize)
 			left_start = i / 2;
 		if ((right_start < 0) && (ravg > THRESHOLD))
 			right_start = i / 2;
-		if (state == TRIGGERED && (lavg < THRESHOLD / 1.2 || ravg < THRESHOLD / 1.2)) {
+		if (state == TRIGGERED && (lavg < THRESHOLD / 2 || ravg < THRESHOLD / 2)) {
 			state = UNTRIGGERED;
 			right_start = -1;
 			left_start = -1;

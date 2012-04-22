@@ -9,7 +9,7 @@ MidiOutput::MidiOutput() : midi("e2midi")
 
 void  MidiOutput::trigger(float p)
 {
-  int n = p * 10;
+  int n = p * 3;
   std::cout << "MidiOutput trigger: " << p << std::endl;
   std::vector<unsigned char> on = std::vector<unsigned char>();
   on.push_back(0x90);

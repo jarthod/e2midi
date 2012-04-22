@@ -1,11 +1,11 @@
 #include <iostream>
-#include "output_midi.hpp"
+#include "output_tcp.hpp"
 #include "input.hpp"
 #include "threshold_trigger.hpp"
 
 int main()
 {
-  MidiOutput out;
+  TCPOutput out;
   out.trigger(0.5);
 
 	ThresholdTrigger tt = ThresholdTrigger(out);
