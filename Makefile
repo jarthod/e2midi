@@ -27,3 +27,6 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+python:
+	pyuic4 src/client/visualizer.ui > src/client/uic_visualizer.p
