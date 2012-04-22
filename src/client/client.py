@@ -24,7 +24,7 @@ class e2midiClient(object):
         while True:
             data += s.recv(255)
             if data.endswith("\n"):
-                self.handle_data(float(data))
+                [self.handle_data(float(nb)) for nb in data.split('\n') if nb != '']
                 data = ""
 
 
