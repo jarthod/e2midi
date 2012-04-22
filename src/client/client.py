@@ -14,8 +14,8 @@ class e2midiClient(object):
 
     def handle_data(self, position):
         print position
-        print "play: %s" % int(position * (len(self.sound) - 1))
-        self.sound[min(len(self.sound), int(position * (len(self.sound) - 1)))].play()
+        print "play: %s" % int(position * len(self.sound))
+        self.sound[min(len(self.sound) - 1, int(position * len(self.sound)))].play()
 
     def listen(self, host):
         s = socket.create_connection((host, 2012))
