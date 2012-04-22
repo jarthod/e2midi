@@ -29,4 +29,4 @@ fclean: clean
 re: fclean all
 
 python:
-	pyuic4 src/client/visualizer.ui > src/client/uic_visualizer.p
+	pyuic4 src/client/visualizer.ui > src/client/uic_visualizer.py
