@@ -10,7 +10,7 @@ const double ThresholdTrigger::THRESHOLD = 1;
 const int ThresholdTrigger::AVG_WIDTH = 40;
 	
 ThresholdTrigger::ThresholdTrigger(Output& output)
-: Trigger(output), output(output)
+: Trigger(output), output(output), frame(0), last_trigger(0)
 {}
 
 void ThresholdTrigger::displaySample(stk::StkFloat left, stk::StkFloat right)
@@ -119,29 +119,22 @@ void ThresholdTrigger::feedMe(stk::StkFloat *samples, unsigned int buffSize)
 			right_start = -1;
 			left_start = -1;
 		}
-		if (state == TRIGGERING) {
-		//	displaySample(samples[i], samples[i+1]);
-		}
+		// Soon after tap detection, time alignment
 		if (state == TRIGGERING && (i/2) == (std::max(left_start, right_start) + (AVG_WIDTH / 2))) {
 			int diff = evaluateTimeDifference();
-			//std::cout << "trigger ! " << lavg << " - " << ravg << " - " << left_start << " - " << right_start << " (" << diff << ")" << std::endl;
 			if (diff == -9999) {
 				//std::cout << "false positive !!!" << std::endl;
 			} else {
 				this->output.trigger((std::max(-WIDTH, std::min(WIDTH, static_cast<double>(diff))) + WIDTH) / (2.*WIDTH));				
 			}
 			state = TRIGGERED;
+			last_trigger = frame;
 		}
 
 		// Tap detection
-		if (state == UNTRIGGERED && left_start >= 0 && right_start >= 0) {
-			//std::cerr << out.rdbuf();
-			//out.clear();
-			//for (unsigned j = 0; j < last_vals.size(); j+= 2) {
-			//	displaySample(last_vals[j], last_vals[j+1]);
-			//}
-			//std::cout << "detection ! " << lavg << " - " << ravg << " - " << left_start << " - " << right_start << " (" << (left_start - right_start) << ")" << std::endl;
+		if (state == UNTRIGGERED && left_start >= 0 && right_start >= 0 && (frame - last_trigger) > 20000) {
 			state = TRIGGERING;
 		}
+		frame++;
 	}
 }

@@ -23,6 +23,7 @@ class ThresholdTrigger: public Trigger
     void        displaySample(stk::StkFloat left, stk::StkFloat right);
 		Output& output;
     std::deque<stk::StkFloat>  last_vals;
+    unsigned    frame, last_trigger;
 };
 
 #endif /* THRESHOLD_TRIGGER_HPP */
