@@ -14,7 +14,9 @@ Requirements
 You need:
 - 2 Microphones (they have to be identical and distant, we used our HP Envy 14's build in stereo mic)
 - Linux, G++ and Make
-- libstk
+- libstk (Ubuntu: `$ sudo apt-get install stk libstk0-dev`)
+
+![HP Envy 14 stereo Mic](http://photo.rootbox.fr/files/13051_large.jpg)
 
 How to run
 ----------
@@ -23,6 +25,8 @@ How to run
     $ ./e2midi
 
 The software will start listening on the default audio input and open a TCP port (default behaviour). You can change output type by editing `main.cpp`.
+
+![Terminal running e2midi](http://photo.rootbox.fr/files/13052_large.jpg)
 
 Python client
 -------------
