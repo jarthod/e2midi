@@ -3,3 +3,4 @@ media/raw*
 *.o
 *~
 .*
+uic_*

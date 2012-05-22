@@ -15,7 +15,7 @@ CFLAGS = -O3 -W -g -I/usr/include/stk
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) -o $(NAME) $(LIBS) $(OBJ)
+	$(CC) -o $(NAME) $(OBJ) $(LIBS)
 
 .cpp.o:
 	$(CC) -c $(CFLAGS) -o $@ $<
