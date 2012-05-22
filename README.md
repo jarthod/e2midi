@@ -32,5 +32,3 @@ Python client
 -------------
 
 TODO
-
-![Team during hack](http://photo.rootbox.fr/files/12976_large.jpg)
